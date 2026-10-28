@@ -1,0 +1,23 @@
+:root{--p:#173F35;--bg:#F7F1E4;--g:#D3B779;--s:#E4EBDD;--t:#292D28;--t2:#6a695f;--c:#fff}
+[data-theme=dark]{--bg:#101a17;--c:#18271f;--s:#1f3329;--t:#efe9d8;--t2:#b3b09f;--p:#0e2a23}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:17px/1.7 Tajawal,Cairo,"Segoe UI",Tahoma,sans-serif;padding-bottom:76px}
+header{display:flex;align-items:center;gap:10px;background:var(--p);color:#F7F1E4;padding:10px 16px;border-bottom:3px solid var(--g)}
+h1{margin:0;font:700 24px Amiri,"Traditional Arabic",serif;flex:1}h1 small{font:12px sans-serif;color:var(--g);letter-spacing:2px}
+#net{font-size:13px;color:var(--g)}main{max-width:760px;margin:auto;padding:16px;outline:0}
+h2{font:700 26px Amiri,serif;margin:.2em 0 .6em}
+.card{background:var(--c);border:1px solid var(--g);border-radius:14px;padding:14px;margin:0 0 12px}
+.card h3{margin:0 0 6px;font-size:18px}.m{color:var(--t2);font-size:14px}
+button,.btn,input,select,textarea{font:inherit;color:inherit}
+button,.btn{background:var(--p);color:#F7F1E4;border:0;border-radius:10px;min-height:44px;padding:6px 16px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;margin:2px}
+button.alt{background:var(--s);color:var(--t);border:1px solid var(--g)}
+input,select,textarea{width:100%;background:var(--c);border:1px solid var(--g);border-radius:10px;padding:10px;min-height:44px;margin:4px 0}
+:focus-visible{outline:3px solid var(--g);outline-offset:2px}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;background:var(--p);border-top:3px solid var(--g);overflow-x:auto}
+nav a{flex:1;min-width:64px;text-align:center;color:#F7F1E4;text-decoration:none;padding:8px 4px;font-size:13px}
+nav a[aria-current]{background:var(--g);color:#173F35;font-weight:700}
+.bar{height:12px;background:var(--s);border-radius:8px;overflow:hidden;border:1px solid var(--g)}.bar i{display:block;height:100%;background:var(--p);transition:width .3s}
+.q{font:var(--qs,28px)/2.3 Amiri,"Traditional Arabic",serif;text-align:justify}
+.q span{cursor:pointer}.q b{color:var(--g);font:16px sans-serif;margin:0 4px}.q .bm{background:var(--s)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.cnt{font:700 56px sans-serif;text-align:center}.off{color:#2e7d32;font-size:13px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
