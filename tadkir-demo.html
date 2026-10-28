@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tadkir — Demo Reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#07130d; --bg-1:#0c1f15;
+    --panel:#0e2317; --panel-border:#1e4530;
+    --gold:#d4af5a; --gold-soft:#e9cf8f; --cream:#f2ecdd;
+    --muted:#8fae9b; --muted-dim:#5d7869; --active-bg:#1a3a26;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0; overflow:hidden; background:#000;}
+  body{
+    display:flex; align-items:center; justify-content:center;
+    height:100vh; width:100vw;
+    font-family:'Inter',sans-serif;
+  }
+
+  /* Portrait 9:16 stage — record this rectangle */
+  #stage{
+    position:relative;
+    width:405px; height:720px;
+    max-width:100vw; max-height:100vh;
+    background:
+      radial-gradient(ellipse 500px 300px at 50% -5%, rgba(212,175,90,0.10), transparent 60%),
+      radial-gradient(ellipse 600px 500px at 85% 105%, rgba(20,60,40,0.55), transparent 60%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+    color:var(--cream);
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.05);
+  }
+  @media (min-width:406px) and (min-height:721px){
+    #stage{ transform: scale(1); }
+  }
+
+  .scene{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:30px 26px;
+    opacity:0; pointer-events:none;
+    transition:opacity .5s ease;
+  }
+  .scene.active{ opacity:1; pointer-events:auto; }
+
+  /* ---------- shared bits ---------- */
+  .brand-top{
+    position:absolute; top:22px; left:0; right:0;
+    display:flex; align-items:baseline; justify-content:center; gap:8px;
+  }
+  .brand-top .ar{ font-family:'Amiri',serif; color:var(--gold); font-size:1.05rem; }
+  .brand-top .en{ font-family:'Cormorant Garamond',serif; font-size:1.15rem; }
+
+  .eyebrow{ color:var(--gold); font-size:0.62rem; letter-spacing:0.2em; font-weight:600; margin-bottom:8px; text-align:center;}
+  h1.title{
+    font-family:'Cormorant Garamond',serif; font-weight:500;
+    font-size:1.7rem; margin:0 0 14px; text-align:center;
+  }
+  .underline{ width:50px; height:1px; margin:0 auto 26px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+
+  /* ---------- SCENE 1: intro ---------- */
+  #s-intro .ar-huge{
+    font-family:'Amiri', serif; color:var(--gold); font-size:2.6rem; margin-bottom:8px;
+    opacity:0; animation: fadeIn .8s ease 0.2s forwards;
+  }
+  #s-intro .en-huge{
+    font-family:'Cormorant Garamond', serif; font-size:2.1rem; margin-bottom:18px;
+    opacity:0; animation: fadeIn .8s ease 0.5s forwards;
+  }
+  #s-intro .tag{
+    color:var(--muted); font-size:0.85rem; letter-spacing:0.04em;
+    opacity:0; animation: fadeIn .8s ease 0.9s forwards;
+  }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---------- SCENE 2: ayah ---------- */
+  .ayah-card{
+    background:var(--panel); border:1px solid var(--panel-border); border-radius:14px;
+    padding:28px 22px; text-align:center; width:100%;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+  }
+  .ayah-arabic{
+    font-family:'Amiri',serif; font-size:1.35rem; line-height:2; direction:rtl; margin-bottom:14px;
+  }
+  .ayah-divider{ width:36px; height:1px; background:var(--gold); opacity:.5; margin:0 auto 16px;}
+  .ayah-translation{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.95rem;
+    line-height:1.6; color:#d9d3c2; margin-bottom:14px;
+  }
+  .ayah-ref{ color:var(--gold); font-size:0.72rem; }
+
+  /* ---------- SCENE 3: misbaha ---------- */
+  .dhikr-ar{ font-family:'Amiri',serif; font-size:1.5rem; margin-bottom:4px; }
+  .dhikr-en{ color:var(--muted); font-size:0.78rem; margin-bottom:24px; }
+  .counter-wrap{ position:relative; width:170px; height:170px; margin:0 auto 20px; }
+  .counter-wrap svg{ transform:rotate(-90deg); width:100%; height:100%; }
+  .ring-bg{ fill:none; stroke:rgba(255,255,255,0.06); stroke-width:6; }
+  .ring-fg{ fill:none; stroke:var(--gold); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .3s ease; }
+  .counter-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:transform .12s ease;}
+  .counter-center .num{ font-family:'Cormorant Garamond',serif; font-size:2.4rem; line-height:1; }
+  .counter-center .of{ font-size:0.6rem; letter-spacing:0.15em; color:var(--muted-dim); margin-top:4px;}
+  .counter-wrap.tap .counter-center{ transform:scale(0.92); }
+  .counter-wrap.pulse::after{
+    content:""; position:absolute; inset:-12px; border-radius:50%;
+    border:1px solid var(--gold); opacity:0; animation:ringpulse .5s ease;
+  }
+  @keyframes ringpulse{ from{opacity:.6; transform:scale(.9);} to{opacity:0; transform:scale(1.15);} }
+  .beads{ display:flex; justify-content:center; flex-wrap:wrap; gap:6px; max-width:280px; margin:0 auto; }
+  .bead{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.12); transition:background .2s, transform .2s;}
+  .bead.filled{ background:var(--gold); transform:scale(1.15); }
+  .bead.current{ background:var(--gold-soft); box-shadow:0 0 6px var(--gold); }
+
+  /* ---------- SCENE 4: adhkar ---------- */
+  .adhkar-card{
+    background:var(--panel); border:1px solid var(--panel-border); border-radius:12px;
+    padding:18px 18px; margin-bottom:12px; width:100%; transition:opacity .3s ease;
+  }
+  .adhkar-card.done{ opacity:.55; }
+  .adhkar-ar{ font-family:'Amiri',serif; font-size:1.05rem; text-align:right; direction:rtl; margin-bottom:8px; line-height:1.7;}
+  .adhkar-en{ color:#c9c2ae; font-size:0.78rem; line-height:1.5; margin-bottom:12px;}
+  .adhkar-foot{ display:flex; align-items:center; justify-content:space-between; }
+  .tag2{ padding:4px 10px; border-radius:999px; border:1px solid var(--panel-border); color:var(--muted); font-size:0.62rem;}
+  .markdone{
+    display:flex; align-items:center; gap:5px; padding:6px 12px; border-radius:999px;
+    border:1px solid var(--panel-border); background:transparent; color:var(--cream); font-size:0.68rem;
+    transition:all .2s ease;
+  }
+  .markdone.on{ background:var(--active-bg); border-color:var(--gold); color:var(--gold-soft); }
+  .markdone svg{ width:10px; height:10px; }
+
+  /* ---------- SCENE 5: outro ---------- */
+  #s-outro .ar-huge{ font-family:'Amiri',serif; color:var(--gold); font-size:2.2rem; margin-bottom:6px; }
+  #s-outro .en-huge{ font-family:'Cormorant Garamond',serif; font-size:1.8rem; margin-bottom:16px; }
+  #s-outro .cta{
+    padding:11px 26px; border-radius:999px;
+    background:linear-gradient(180deg, var(--gold-soft), var(--gold)); color:#12220f;
+    font-weight:600; font-size:0.85rem;
+  }
+  #s-outro .handle{ margin-top:18px; color:var(--muted); font-size:0.8rem; letter-spacing:0.03em; }
+
+  #restartBtn{
+    position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
+    background:rgba(255,255,255,0.08); color:#fff; border:1px solid rgba(255,255,255,0.2);
+    padding:8px 16px; border-radius:999px; font-size:0.75rem; cursor:pointer; z-index:50;
+    font-family:'Inter',sans-serif;
+  }
+  #restartBtn:hover{ background:rgba(255,255,255,0.15); }
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+  <div class="scene active" id="s-intro">
+    <div class="ar-huge">تَذْكِير</div>
+    <div class="en-huge">Tadkir</div>
+    <div class="tag">quiet remembrance, every day</div>
+  </div>
+
+  <div class="scene" id="s-ayah">
+    <div class="brand-top"><span class="ar">تَذْكِير</span><span class="en">Tadkir</span></div>
+    <div class="eyebrow">VERSE OF THE MOMENT</div>
+    <h1 class="title">A Random Ayah</h1>
+    <div class="underline"></div>
+    <div class="ayah-card">
+      <div class="ayah-arabic">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ</div>
+      <div class="ayah-divider"></div>
+      <div class="ayah-translation">Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence.</div>
+      <div class="ayah-ref">Surah Al-Baqarah · 2:255</div>
+    </div>
+  </div>
+
+  <div class="scene" id="s-misbaha">
+    <div class="brand-top"><span class="ar">تَذْكِير</span><span class="en">Tadkir</span></div>
+    <div class="eyebrow">DIGITAL MISBAHA</div>
+    <h1 class="title">Tasbih Counter</h1>
+    <div class="underline"></div>
+    <div class="dhikr-ar">سُبْحَانَ اللَّٰه</div>
+    <div class="dhikr-en">Glory be to Allah</div>
+    <div class="counter-wrap" id="counterWrap">
+      <svg viewBox="0 0 200 200">
+        <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+        <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="90" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+      </svg>
+      <div class="counter-center">
+        <div class="num" id="countNum">0</div>
+        <div class="of">OF 33</div>
+      </div>
+    </div>
+    <div class="beads" id="beadRow"></div>
+  </div>
+
+  <div class="scene" id="s-adhkar">
+    <div class="brand-top"><span class="ar">تَذْكِير</span><span class="en">Tadkir</span></div>
+    <div class="eyebrow">REMEMBRANCE</div>
+    <h1 class="title">Daily Adhkar</h1>
+    <div class="underline"></div>
+    <div class="adhkar-card" id="ac1">
+      <div class="adhkar-ar">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّٰهِ</div>
+      <div class="adhkar-en">We have entered a new morning and with it all dominion belongs to Allah.</div>
+      <div class="adhkar-foot">
+        <span class="tag2">Once</span>
+        <button class="markdone" id="md1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Mark done</button>
+      </div>
+    </div>
+    <div class="adhkar-card" id="ac2">
+      <div class="adhkar-ar">سُبْحَانَ اللَّٰهِ وَبِحَمْدِهِ</div>
+      <div class="adhkar-en">Glory is to Allah and praise is to Him.</div>
+      <div class="adhkar-foot">
+        <span class="tag2">100 times</span>
+        <button class="markdone" id="md2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Mark done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene" id="s-outro">
+    <div class="ar-huge">تَذْكِير</div>
+    <div class="en-huge">Tadkir</div>
+    <div class="cta">Start your daily dhikr</div>
+    <div class="handle">link in bio</div>
+  </div>
+
+</div>
+
+<button id="restartBtn">Replay demo</button>
+
+<script>
+(function(){
+  const scenes = ['s-intro','s-ayah','s-misbaha','s-adhkar','s-outro'];
+  let sceneEls = scenes.map(id => document.getElementById(id));
+
+  function showScene(i){
+    sceneEls.forEach((el,idx)=> el.classList.toggle('active', idx===i));
+  }
+
+  // Misbaha animation
+  const TARGET = 33;
+  const beadRow = document.getElementById('beadRow');
+  const countNum = document.getElementById('countNum');
+  const ringFg = document.getElementById('ringFg');
+  const counterWrap = document.getElementById('counterWrap');
+  const CIRC = 2*Math.PI*90;
+
+  for(let i=0;i<TARGET;i++){
+    const b = document.createElement('div');
+    b.className = 'bead';
+    beadRow.appendChild(b);
+  }
+
+  function setCount(c){
+    countNum.textContent = c;
+    ringFg.style.strokeDashoffset = CIRC * (1 - c/TARGET);
+    [...beadRow.children].forEach((b,i)=>{
+      b.classList.toggle('filled', i<c);
+      b.classList.toggle('current', i===c);
+    });
+  }
+  setCount(0);
+
+  let misbahaTimer = null;
+  function animateMisbaha(){
+    let c = 0;
+    setCount(0);
+    misbahaTimer = setInterval(()=>{
+      c++;
+      setCount(Math.min(c, TARGET));
+      counterWrap.classList.add('pulse');
+      setTimeout(()=>counterWrap.classList.remove('pulse'), 300);
+      if(c>=TARGET){ clearInterval(misbahaTimer); }
+    }, 260);
+  }
+  function stopMisbaha(){ if(misbahaTimer) clearInterval(misbahaTimer); }
+
+  // Adhkar animation
+  function resetAdhkar(){
+    document.getElementById('ac1').classList.remove('done');
+    document.getElementById('ac2').classList.remove('done');
+    document.getElementById('md1').classList.remove('on');
+    document.getElementById('md2').classList.remove('on');
+    document.getElementById('md1').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Mark done';
+    document.getElementById('md2').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Mark done';
+  }
+  function markDone(n){
+    document.getElementById('ac'+n).classList.add('done');
+    const btn = document.getElementById('md'+n);
+    btn.classList.add('on');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Done';
+  }
+
+  let timeouts = [];
+  function clearAll(){ timeouts.forEach(t=>clearTimeout(t)); timeouts = []; stopMisbaha(); }
+
+  function runSequence(){
+    clearAll();
+    resetAdhkar();
+    showScene(0); // intro
+
+    timeouts.push(setTimeout(()=> showScene(1), 2200));            // ayah
+    timeouts.push(setTimeout(()=> showScene(2), 5200));            // misbaha
+    timeouts.push(setTimeout(()=> animateMisbaha(), 5500));
+    timeouts.push(setTimeout(()=> showScene(3), 9600));            // adhkar
+    timeouts.push(setTimeout(()=> markDone(1), 10400));
+    timeouts.push(setTimeout(()=> markDone(2), 11400));
+    timeouts.push(setTimeout(()=> showScene(4), 13400));           // outro
+    timeouts.push(setTimeout(()=> runSequence(), 16400));          // loop
+  }
+
+  document.getElementById('restartBtn').addEventListener('click', runSequence);
+
+  runSequence();
+})();
+</script>
+</body>
+</html>
