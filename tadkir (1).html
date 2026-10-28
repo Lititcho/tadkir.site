@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tadkir — Quiet Remembrance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#07130d;
+    --bg-1:#0c1f15;
+    --bg-2:#0f2a1c;
+    --panel:#0e2317;
+    --panel-border:#1e4530;
+    --gold:#d4af5a;
+    --gold-soft:#e9cf8f;
+    --cream:#f2ecdd;
+    --muted:#8fae9b;
+    --muted-dim:#5d7869;
+    --active-bg:#1a3a26;
+    --shadow:0 20px 60px -25px rgba(0,0,0,0.7);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(212,175,90,0.08), transparent 60%),
+      radial-gradient(ellipse 1200px 800px at 80% 110%, rgba(20,60,40,0.5), transparent 60%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px clamp(20px,5vw,64px);
+    border-bottom:1px solid rgba(212,175,90,0.12);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    color:var(--cream);
+  }
+  .brand .ar{
+    font-family:'Amiri', serif;
+    color:var(--gold);
+    font-size:1.25rem;
+  }
+  .brand .en{
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.35rem;
+    letter-spacing:0.02em;
+  }
+  nav{
+    display:flex;
+    gap:6px;
+    background:rgba(0,0,0,0.15);
+    padding:5px;
+    border-radius:999px;
+    border:1px solid rgba(212,175,90,0.1);
+  }
+  .navbtn{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:9px 18px;
+    border-radius:999px;
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    font-family:'Inter',sans-serif;
+    font-size:0.88rem;
+    cursor:pointer;
+    transition:background .25s ease, color .25s ease;
+    white-space:nowrap;
+  }
+  .navbtn svg{width:15px;height:15px;flex-shrink:0;}
+  .navbtn.active{
+    background:var(--active-bg);
+    color:var(--gold-soft);
+    box-shadow:inset 0 0 0 1px rgba(212,175,90,0.25);
+  }
+  .navbtn:hover:not(.active){color:var(--cream);}
+
+  main{
+    flex:1;
+    width:100%;
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 22px 40px;
+  }
+
+  .view{display:none;}
+  .view.active{display:block; animation:fadeUp .45s ease both;}
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .eyebrow{
+    text-align:center;
+    color:var(--gold);
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  h1.title{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(2rem,4.5vw,2.7rem);
+    margin:0 0 18px;
+    color:var(--cream);
+  }
+  .underline{
+    width:70px;
+    height:1px;
+    margin:0 auto 40px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* ---------- AYAH VIEW ---------- */
+  .ayah-card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent), var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    padding:clamp(28px,5vw,56px) clamp(20px,6vw,60px);
+    box-shadow:var(--shadow);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .ayah-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at 50% 0%, rgba(212,175,90,0.06), transparent 55%);
+    pointer-events:none;
+  }
+  .ayah-arabic{
+    font-family:'Amiri', serif;
+    font-size:clamp(1.5rem,3.6vw,2.1rem);
+    line-height:2.1;
+    direction:rtl;
+    color:var(--cream);
+    margin-bottom:18px;
+    transition:opacity .35s ease;
+  }
+  .ayah-divider{
+    width:44px; height:1px;
+    background:var(--gold);
+    opacity:0.5;
+    margin:0 auto 24px;
+  }
+  .ayah-translation{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.18rem;
+    line-height:1.7;
+    color:#d9d3c2;
+    max-width:60ch;
+    margin:0 auto 22px;
+    transition:opacity .35s ease;
+  }
+  .ayah-ref{
+    color:var(--gold);
+    font-size:0.85rem;
+    letter-spacing:0.02em;
+  }
+
+  .btnrow{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin:34px 0 44px;
+  }
+  .btn{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 24px;
+    border-radius:999px;
+    border:1px solid rgba(212,175,90,0.3);
+    background:transparent;
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .btn svg{width:15px;height:15px;}
+  .btn:active{transform:scale(0.96);}
+  .btn.primary{
+    background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+    color:#12220f;
+    border:none;
+    font-weight:600;
+    box-shadow:0 10px 30px -10px rgba(212,175,90,0.5);
+  }
+  .btn.primary:hover{filter:brightness(1.06);}
+  .btn:hover:not(.primary){background:rgba(212,175,90,0.08);}
+  .btn.copied{background:var(--active-bg); border-color:var(--gold);}
+
+  .rotate{animation:spin .6s ease;}
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .crosslinks{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  @media(max-width:600px){ .crosslinks{grid-template-columns:1fr;} }
+  .cross{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:12px;
+    padding:22px 24px;
+    cursor:pointer;
+    text-align:left;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .cross:hover{border-color:rgba(212,175,90,0.4); transform:translateY(-2px);}
+  .cross h3{
+    margin:0 0 6px;
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.3rem;
+    color:var(--cream);
+  }
+  .cross p{
+    margin:0;
+    font-size:0.86rem;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  /* ---------- MISBAHA VIEW ---------- */
+  .pillrow{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:36px;
+  }
+  .pill{
+    padding:9px 18px;
+    border-radius:999px;
+    border:1px solid var(--panel-border);
+    background:rgba(255,255,255,0.02);
+    color:var(--muted);
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .pill.active{
+    background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+    color:#12220f;
+    font-weight:600;
+    border-color:transparent;
+  }
+  .pill:hover:not(.active){border-color:rgba(212,175,90,0.4); color:var(--cream);}
+
+  .misbaha-card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    padding:46px 20px 36px;
+    box-shadow:var(--shadow);
+    text-align:center;
+  }
+  .dhikr-ar{
+    font-family:'Amiri', serif;
+    font-size:2.1rem;
+    color:var(--cream);
+    margin-bottom:6px;
+  }
+  .dhikr-en{
+    color:var(--muted);
+    font-size:0.92rem;
+    margin-bottom:34px;
+  }
+
+  .counter-wrap{
+    position:relative;
+    width:230px;
+    height:230px;
+    margin:0 auto 26px;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .counter-wrap svg{transform:rotate(-90deg); width:100%; height:100%;}
+  .ring-bg{fill:none; stroke:rgba(255,255,255,0.06); stroke-width:6;}
+  .ring-fg{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:6;
+    stroke-linecap:round;
+    transition:stroke-dashoffset .25s ease;
+  }
+  .counter-center{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    transition:transform .12s ease;
+  }
+  .counter-center .num{
+    font-family:'Cormorant Garamond', serif;
+    font-size:3.2rem;
+    line-height:1;
+    color:var(--cream);
+  }
+  .counter-center .of{
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    color:var(--muted-dim);
+    margin-top:6px;
+  }
+  .counter-wrap.tap .counter-center{transform:scale(0.94);}
+  .counter-wrap.pulse::after{
+    content:"";
+    position:absolute; inset:-14px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    opacity:0;
+    animation:ringpulse .5s ease;
+  }
+  @keyframes ringpulse{
+    from{opacity:0.6; transform:scale(0.9);}
+    to{opacity:0; transform:scale(1.15);}
+  }
+
+  .beads{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:8px;
+    max-width:420px;
+    margin:0 auto 30px;
+  }
+  .bead{
+    width:8px; height:8px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    transition:background .2s ease, transform .2s ease;
+  }
+  .bead.filled{background:var(--gold); transform:scale(1.15);}
+  .bead.current{background:var(--gold-soft); box-shadow:0 0 8px var(--gold);}
+
+  .misbaha-controls{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .chip{
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid var(--panel-border);
+    background:rgba(255,255,255,0.02);
+    color:var(--muted);
+    font-size:0.82rem;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .chip:hover{border-color:rgba(212,175,90,0.4); color:var(--cream);}
+  .chip.on{color:var(--gold-soft);}
+  .hint{color:var(--muted-dim); font-size:0.8rem; margin-top:6px;}
+
+  /* ---------- ADHKAR VIEW ---------- */
+  .tabrow{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:36px;
+  }
+  .adhkar-card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:14px;
+    padding:26px 28px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+    transition:border-color .2s ease, opacity .3s ease;
+  }
+  .adhkar-card.done{opacity:0.55;}
+  .adhkar-ar{
+    font-family:'Amiri', serif;
+    font-size:1.4rem;
+    color:var(--cream);
+    text-align:right;
+    direction:rtl;
+    margin-bottom:12px;
+    line-height:1.9;
+  }
+  .adhkar-divider{width:36px; height:1px; background:var(--gold); opacity:0.4; margin-bottom:12px;}
+  .adhkar-translit{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--gold-soft);
+    font-size:0.98rem;
+    margin-bottom:6px;
+  }
+  .adhkar-en{
+    color:#c9c2ae;
+    font-size:0.92rem;
+    line-height:1.6;
+    margin-bottom:18px;
+  }
+  .adhkar-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .tag{
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid var(--panel-border);
+    color:var(--muted);
+    font-size:0.75rem;
+  }
+  .markdone{
+    display:flex; align-items:center; gap:6px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid var(--panel-border);
+    background:transparent;
+    color:var(--cream);
+    font-size:0.82rem;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .markdone svg{width:13px; height:13px;}
+  .markdone.on{
+    background:var(--active-bg);
+    border-color:var(--gold);
+    color:var(--gold-soft);
+  }
+  .progress-text{
+    text-align:center;
+    color:var(--gold);
+    font-size:0.85rem;
+    margin-top:22px;
+  }
+
+  footer{
+    text-align:center;
+    padding:26px 20px 34px;
+    border-top:1px solid rgba(212,175,90,0.1);
+    color:var(--muted-dim);
+    font-size:0.78rem;
+    line-height:1.8;
+  }
+  footer .ar{ color:#6f8b7a; font-family:'Amiri', serif; }
+  footer .brand-mini{opacity:0.6;}
+
+  ::selection{background:rgba(212,175,90,0.3);}
+
+  @media(max-width:640px){
+    header{flex-direction:column; gap:14px; align-items:stretch;}
+    nav{justify-content:center;}
+    .navbtn span.label{display:inline;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="ar">تَذْكِير</span>
+    <span class="en">Tadkir</span>
+  </div>
+  <nav>
+    <button class="navbtn active" data-view="ayah">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+      <span class="label">Ayah</span>
+    </button>
+    <button class="navbtn" data-view="misbaha">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <span class="label">Misbaha</span>
+    </button>
+    <button class="navbtn" data-view="adhkar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21c-4-3-8-6-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5-4 8-8 11-.3.2-.7.2-1 0Z" transform="scale(0.85) translate(1.8,1.8)"/></svg>
+      <span class="label">Adhkar</span>
+    </button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ================= AYAH VIEW ================= -->
+  <section class="view active" id="view-ayah">
+    <div class="eyebrow">VERSE OF THE MOMENT</div>
+    <h1 class="title">A Random Ayah</h1>
+    <div class="underline"></div>
+
+    <div class="ayah-card">
+      <div class="ayah-arabic" id="ayahArabic"></div>
+      <div class="ayah-divider"></div>
+      <div class="ayah-translation" id="ayahTranslation"></div>
+      <div class="ayah-ref" id="ayahRef"></div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn primary" id="newAyahBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>
+        New ayah
+      </button>
+      <button class="btn" id="copyAyahBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        Copy
+      </button>
+    </div>
+
+    <div class="crosslinks">
+      <div class="cross" data-jump="misbaha">
+        <h3>Digital Misbaha</h3>
+        <p>Tap through dhikr presets with bead sounds and round tracking.</p>
+      </div>
+      <div class="cross" data-jump="adhkar">
+        <h3>Daily Adhkar</h3>
+        <p>Morning, evening, and anytime remembrances with translations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MISBAHA VIEW ================= -->
+  <section class="view" id="view-misbaha">
+    <div class="eyebrow">DIGITAL MISBAHA</div>
+    <h1 class="title">Tasbih Counter</h1>
+    <div class="underline"></div>
+
+    <div class="pillrow" id="dhikrPills"></div>
+
+    <div class="misbaha-card">
+      <div class="dhikr-ar" id="dhikrAr">سُبْحَانَ اللَّٰه</div>
+      <div class="dhikr-en" id="dhikrEn">Glory be to Allah</div>
+
+      <div class="counter-wrap" id="counterWrap">
+        <svg viewBox="0 0 200 200">
+          <circle class="ring-bg" cx="100" cy="100" r="90"></circle>
+          <circle class="ring-fg" id="ringFg" cx="100" cy="100" r="90"
+                  stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+        </svg>
+        <div class="counter-center">
+          <div class="num" id="countNum">0</div>
+          <div class="of" id="countOf">OF 33</div>
+        </div>
+      </div>
+
+      <div class="beads" id="beadRow"></div>
+
+      <div class="misbaha-controls">
+        <div class="chip" id="roundsChip">Rounds completed: <span id="roundsNum">0</span></div>
+        <div class="chip on" id="soundChip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path id="soundWave" d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+          <span id="soundLabel">Sound on</span>
+        </div>
+        <div class="chip" id="resetChip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>
+          Reset
+        </div>
+      </div>
+      <div class="hint">Tap the circle, or press Space, to count one bead.</div>
+    </div>
+  </section>
+
+  <!-- ================= ADHKAR VIEW ================= -->
+  <section class="view" id="view-adhkar">
+    <div class="eyebrow">REMEMBRANCE</div>
+    <h1 class="title">Daily Adhkar</h1>
+    <div class="underline"></div>
+
+    <div class="tabrow" id="adhkarTabs">
+      <button class="pill active" data-period="morning">Morning</button>
+      <button class="pill" data-period="evening">Evening</button>
+      <button class="pill" data-period="anytime">Anytime</button>
+    </div>
+
+    <div id="adhkarList"></div>
+
+    <div class="progress-text" id="adhkarProgress"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div><span class="ar">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</span> — Built for quiet remembrance</div>
+  <div class="brand-mini">powered by lititch</div>
+</footer>
+
+<script>
+(function(){
+
+  /* ---------------- SOUND ENGINE (Web Audio, no files needed) ---------------- */
+  let actx;
+  function ac(){
+    if(!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if(actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+
+  function playClick(){
+    const ctx = ac();
+    const t0 = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(720, t0);
+    osc.frequency.exponentialRampToValueAtTime(360, t0+0.09);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.28, t0+0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.14);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0+0.16);
+  }
+
+  function playChime(){
+    const ctx = ac();
+    const t0 = ctx.currentTime;
+    [660, 990, 1320].forEach((freq, i)=>{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = freq;
+      const start = t0 + i*0.09;
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.22, start+0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start+0.55);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start+0.6);
+    });
+  }
+
+  function playSoftTap(){
+    const ctx = ac();
+    const t0 = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(500, t0);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.18, t0+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.09);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0+0.1);
+  }
+
+  /* ---------------- NAVIGATION ---------------- */
+  const navBtns = document.querySelectorAll('.navbtn');
+  const views = document.querySelectorAll('.view');
+
+  function goTo(name){
+    navBtns.forEach(b => b.classList.toggle('active', b.dataset.view === name));
+    views.forEach(v => v.classList.toggle('active', v.id === 'view-'+name));
+  }
+  navBtns.forEach(b => b.addEventListener('click', () => { playSoftTap(); goTo(b.dataset.view); }));
+  document.querySelectorAll('[data-jump]').forEach(el=>{
+    el.addEventListener('click', ()=>{ playSoftTap(); goTo(el.dataset.jump); });
+  });
+
+  /* ---------------- AYAH DATA ---------------- */
+  const AYAT = [
+    {
+      ar: "اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",
+      en: "Allah — there is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness overtakes Him nor sleep.",
+      ref: "Surah Al-Baqarah (البقرة) · 2:255"
+    },
+    {
+      ar: "وَبَشِّرِ الصَّابِرِينَ الَّذِينَ إِذَا أَصَابَتْهُم مُّصِيبَةٌ قَالُوا إِنَّا لِلَّهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ",
+      en: "And give good tidings to the patient, who, when disaster strikes them, say, 'Indeed we belong to Allah, and indeed to Him we will return.'",
+      ref: "Surah Al-Baqarah (البقرة) · 2:155-156"
+    },
+    {
+      ar: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+      en: "For indeed, with hardship comes ease.",
+      ref: "Surah Ash-Sharh (الشرح) · 94:5"
+    },
+    {
+      ar: "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ ۚ إِنَّ اللَّهَ بَالِغُ أَمْرِهِ",
+      en: "And whoever relies upon Allah — then He is sufficient for him. Indeed, Allah will accomplish His purpose.",
+      ref: "Surah At-Talaq (الطلاق) · 65:3"
+    },
+    {
+      ar: "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+      en: "Verily, in the remembrance of Allah do hearts find rest.",
+      ref: "Surah Ar-Ra'd (الرعد) · 13:28"
+    },
+    {
+      ar: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+      en: "Our Lord, give us in this world good and in the Hereafter good, and protect us from the punishment of the Fire.",
+      ref: "Surah Al-Baqarah (البقرة) · 2:201"
+    },
+    {
+      ar: "وَقُل رَّبِّ زِدْنِي عِلْمًا",
+      en: "And say: My Lord, increase me in knowledge.",
+      ref: "Surah Ta-Ha (طه) · 20:114"
+    }
+  ];
+
+  const ayahArabic = document.getElementById('ayahArabic');
+  const ayahTranslation = document.getElementById('ayahTranslation');
+  const ayahRef = document.getElementById('ayahRef');
+  let lastIdx = -1;
+
+  function renderAyah(idx){
+    ayahArabic.style.opacity = 0;
+    ayahTranslation.style.opacity = 0;
+    setTimeout(()=>{
+      const a = AYAT[idx];
+      ayahArabic.textContent = a.ar;
+      ayahTranslation.textContent = a.en;
+      ayahRef.textContent = a.ref;
+      ayahArabic.style.opacity = 1;
+      ayahTranslation.style.opacity = 1;
+    }, 180);
+  }
+
+  function newAyah(){
+    let idx;
+    do { idx = Math.floor(Math.random()*AYAT.length); } while(idx === lastIdx && AYAT.length>1);
+    lastIdx = idx;
+    renderAyah(idx);
+  }
+  renderAyah(Math.floor(Math.random()*AYAT.length));
+
+  const newAyahBtn = document.getElementById('newAyahBtn');
+  newAyahBtn.addEventListener('click', ()=>{
+    playSoftTap();
+    newAyahBtn.querySelector('svg').classList.add('rotate');
+    setTimeout(()=> newAyahBtn.querySelector('svg').classList.remove('rotate'), 600);
+    newAyah();
+  });
+
+  const copyBtn = document.getElementById('copyAyahBtn');
+  copyBtn.addEventListener('click', ()=>{
+    playSoftTap();
+    const text = `${ayahArabic.textContent}\n\n${ayahTranslation.textContent}\n— ${ayahRef.textContent}`;
+    navigator.clipboard && navigator.clipboard.writeText(text).catch(()=>{});
+    const original = copyBtn.innerHTML;
+    copyBtn.classList.add('copied');
+    copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Copied';
+    setTimeout(()=>{
+      copyBtn.classList.remove('copied');
+      copyBtn.innerHTML = original;
+    }, 1600);
+  });
+
+  /* ---------------- MISBAHA ---------------- */
+  const DHIKR = [
+    { key:'subhanallah', ar:'سُبْحَانَ اللَّٰه', en:'Glory be to Allah', label:'SubhanAllah' },
+    { key:'alhamdulillah', ar:'الْحَمْدُ لِلَّٰه', en:'All praise is due to Allah', label:'Alhamdulillah' },
+    { key:'allahuakbar', ar:'اللَّٰهُ أَكْبَر', en:'Allah is the Greatest', label:'Allahu Akbar' },
+    { key:'lailaha', ar:'لَا إِلَٰهَ إِلَّا اللَّٰه', en:'There is no deity but Allah', label:'La ilaha illa Allah' },
+    { key:'astaghfirullah', ar:'أَسْتَغْفِرُ اللَّٰه', en:'I seek forgiveness from Allah', label:'Astaghfirullah' },
+    { key:'salawat', ar:'اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّد', en:'O Allah, send blessings upon Muhammad', label:'Salawat' }
+  ];
+
+  const pillWrap = document.getElementById('dhikrPills');
+  DHIKR.forEach((d,i)=>{
+    const p = document.createElement('button');
+    p.className = 'pill' + (i===0 ? ' active':'');
+    p.textContent = d.label;
+    p.dataset.key = d.key;
+    pillWrap.appendChild(p);
+  });
+
+  const TARGET = 33;
+  let activeDhikr = 0;
+  let count = 0;
+  let rounds = 0;
+  let soundOn = true;
+
+  const dhikrAr = document.getElementById('dhikrAr');
+  const dhikrEn = document.getElementById('dhikrEn');
+  const countNum = document.getElementById('countNum');
+  const countOf = document.getElementById('countOf');
+  const ringFg = document.getElementById('ringFg');
+  const beadRow = document.getElementById('beadRow');
+  const counterWrap = document.getElementById('counterWrap');
+  const roundsNum = document.getElementById('roundsNum');
+  const soundChip = document.getElementById('soundChip');
+  const soundLabel = document.getElementById('soundLabel');
+  const resetChip = document.getElementById('resetChip');
+
+  const CIRC = 2 * Math.PI * 90;
+
+  function buildBeads(){
+    beadRow.innerHTML = '';
+    for(let i=0;i<TARGET;i++){
+      const b = document.createElement('div');
+      b.className = 'bead';
+      beadRow.appendChild(b);
+    }
+    updateBeads();
+  }
+
+  function updateBeads(){
+    const beads = beadRow.children;
+    for(let i=0;i<beads.length;i++){
+      beads[i].classList.toggle('filled', i < count);
+      beads[i].classList.toggle('current', i === count);
+    }
+  }
+
+  function updateRing(){
+    const pct = count / TARGET;
+    ringFg.style.strokeDasharray = CIRC;
+    ringFg.style.strokeDashoffset = CIRC * (1 - pct);
+  }
+
+  function loadDhikr(i){
+    activeDhikr = i;
+    dhikrAr.textContent = DHIKR[i].ar;
+    dhikrEn.textContent = DHIKR[i].en;
+    countOf.textContent = 'OF ' + TARGET;
+    count = 0;
+    countNum.textContent = 0;
+    updateRing();
+    buildBeads();
+    [...pillWrap.children].forEach((p,idx)=> p.classList.toggle('active', idx===i));
+  }
+  loadDhikr(0);
+
+  pillWrap.addEventListener('click', (e)=>{
+    const p = e.target.closest('.pill');
+    if(!p) return;
+    playSoftTap();
+    const idx = [...pillWrap.children].indexOf(p);
+    loadDhikr(idx);
+  });
+
+  function tick(){
+    count++;
+    if(count >= TARGET){
+      countNum.textContent = TARGET;
+      updateBeads();
+      updateRing();
+      if(soundOn) playChime();
+      counterWrap.classList.add('pulse');
+      setTimeout(()=> counterWrap.classList.remove('pulse'), 500);
+      setTimeout(()=>{
+        rounds++;
+        roundsNum.textContent = rounds;
+        count = 0;
+        countNum.textContent = 0;
+        updateBeads();
+        updateRing();
+      }, 420);
+      return;
+    }
+    countNum.textContent = count;
+    updateBeads();
+    updateRing();
+    if(soundOn) playClick();
+    counterWrap.classList.add('pulse');
+    setTimeout(()=> counterWrap.classList.remove('pulse'), 400);
+  }
+
+  counterWrap.addEventListener('click', ()=>{
+    counterWrap.classList.add('tap');
+    setTimeout(()=> counterWrap.classList.remove('tap'), 120);
+    tick();
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.code === 'Space' && document.getElementById('view-misbaha').classList.contains('active')){
+      e.preventDefault();
+      counterWrap.classList.add('tap');
+      setTimeout(()=> counterWrap.classList.remove('tap'), 120);
+      tick();
+    }
+  });
+
+  soundChip.addEventListener('click', ()=>{
+    soundOn = !soundOn;
+    soundChip.classList.toggle('on', soundOn);
+    soundLabel.textContent = soundOn ? 'Sound on' : 'Sound off';
+    document.getElementById('soundWave').style.display = soundOn ? '' : 'none';
+    if(soundOn) playSoftTap();
+  });
+
+  resetChip.addEventListener('click', ()=>{
+    playSoftTap();
+    count = 0;
+    rounds = 0;
+    roundsNum.textContent = 0;
+    countNum.textContent = 0;
+    updateBeads();
+    updateRing();
+  });
+
+  /* ---------------- ADHKAR ---------------- */
+  const ADHKAR = {
+    morning: [
+      { ar:'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّٰهِ، وَالْحَمْدُ لِلَّٰهِ، لَا إِلَٰهَ إِلَّا اللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+        tr:'Asbahna wa asbahal-mulku lillah...',
+        en:'We have entered a new morning and with it all dominion belongs to Allah. Praise is to Allah. There is no deity but Allah alone, without partner.',
+        tag:'Once' },
+      { ar:'اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ',
+        tr:'Allahumma bika asbahna...',
+        en:'O Allah, by You we enter the morning and by You we enter the evening, by You we live and by You we die.',
+        tag:'Once' },
+      { ar:'سُبْحَانَ اللَّٰهِ وَبِحَمْدِهِ',
+        tr:'SubhanAllahi wa bihamdih',
+        en:'Glory is to Allah and praise is to Him.',
+        tag:'100 times' }
+    ],
+    evening: [
+      { ar:'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّٰهِ، وَالْحَمْدُ لِلَّٰهِ، لَا إِلَٰهَ إِلَّا اللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
+        tr:'Amsayna wa amsal-mulku lillah...',
+        en:'We have entered the evening and with it all dominion belongs to Allah. Praise is to Allah. There is no deity but Allah alone, without partner.',
+        tag:'Once' },
+      { ar:'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ',
+        tr:'Allahumma anta Rabbi...',
+        en:'O Allah, You are my Lord, there is no deity but You. You created me and I am Your servant.',
+        tag:'Once' },
+      { ar:'أَعُوذُ بِكَلِمَاتِ اللَّٰهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ',
+        tr:'A\u2019udhu bikalimatillahi\u2019t-tammati...',
+        en:'I seek refuge in the perfect words of Allah from the evil of what He has created.',
+        tag:'3 times' }
+    ],
+    anytime: [
+      { ar:'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّٰه',
+        tr:'La hawla wala quwwata illa billah',
+        en:'There is no power and no strength except with Allah.',
+        tag:'Anytime' },
+      { ar:'حَسْبُنَا اللَّٰهُ وَنِعْمَ الْوَكِيلُ',
+        tr:'Hasbunallahu wa ni\u2019mal wakeel',
+        en:'Allah is sufficient for us, and He is the best disposer of affairs.',
+        tag:'Anytime' },
+      { ar:'سُبْحَانَ اللَّٰهِ وَالْحَمْدُ لِلَّٰهِ وَلَا إِلَٰهَ إِلَّا اللَّٰهُ وَاللَّٰهُ أَكْبَرُ',
+        tr:'SubhanAllahi wal hamdulillahi...',
+        en:'Glory be to Allah, praise be to Allah, there is no deity but Allah, and Allah is the Greatest.',
+        tag:'Anytime' }
+    ]
+  };
+
+  const done = { morning:new Set(), evening:new Set(), anytime:new Set() };
+  let period = 'morning';
+
+  const adhkarTabs = document.getElementById('adhkarTabs');
+  const adhkarList = document.getElementById('adhkarList');
+  const adhkarProgress = document.getElementById('adhkarProgress');
+
+  function renderAdhkar(){
+    adhkarList.innerHTML = '';
+    const items = ADHKAR[period];
+    items.forEach((item, idx)=>{
+      const isDone = done[period].has(idx);
+      const card = document.createElement('div');
+      card.className = 'adhkar-card' + (isDone ? ' done' : '');
+      card.innerHTML = `
+        <div class="adhkar-ar">${item.ar}</div>
+        <div class="adhkar-divider"></div>
+        <div class="adhkar-translit">${item.tr}</div>
+        <div class="adhkar-en">${item.en}</div>
+        <div class="adhkar-foot">
+          <span class="tag">${item.tag}</span>
+          <button class="markdone ${isDone ? 'on':''}" data-idx="${idx}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+            ${isDone ? 'Done' : 'Mark done'}
+          </button>
+        </div>`;
+      adhkarList.appendChild(card);
+    });
+    adhkarProgress.textContent = `${done[period].size} of ${items.length} marked complete today`;
+  }
+  renderAdhkar();
+
+  adhkarTabs.addEventListener('click', (e)=>{
+    const p = e.target.closest('.pill');
+    if(!p) return;
+    playSoftTap();
+    period = p.dataset.period;
+    [...adhkarTabs.children].forEach(c => c.classList.toggle('active', c===p));
+    renderAdhkar();
+  });
+
+  adhkarList.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.markdone');
+    if(!btn) return;
+    const idx = Number(btn.dataset.idx);
+    if(done[period].has(idx)){
+      done[period].delete(idx);
+      playSoftTap();
+    } else {
+      done[period].add(idx);
+      playChime();
+    }
+    renderAdhkar();
+  });
+
+})();
+</script>
+</body>
+</html>
